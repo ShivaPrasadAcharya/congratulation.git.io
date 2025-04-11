@@ -178,24 +178,28 @@
         /* Flip icon styling */
         .flip-icon {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
+            bottom: 12px;
+            left: 75%; /* Position 75% from the left */
+            right: auto;
+            width: 25px;
+            height: 25px;
             background-color: rgba(128, 0, 0, 0.8);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10;
-            cursor: pointer;
+            cursor: move; /* Changed to move cursor to indicate it's draggable */
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            user-select: none; /* Prevent text selection during drag */
+            touch-action: none; /* Prevent scrolling during touch on mobile */
         }
         
         .flip-icon svg {
-            width: 24px;
-            height: 24px;
+            width: 16px;
+            height: 16px;
             fill: white;
+            pointer-events: none; /* Make sure click events work properly when clicking on SVG */
         }
         
         .language-indicator {
@@ -241,15 +245,15 @@
             }
             
             .flip-icon {
-                bottom: 15px;
-                right: 15px;
-                width: 35px;
-                height: 35px;
+                bottom: 10px;
+                right: 10px;
+                width: 22px;
+                height: 22px;
             }
             
             .flip-icon svg {
-                width: 20px;
-                height: 20px;
+                width: 14px;
+                height: 14px;
             }
             
             .header img {
@@ -294,8 +298,7 @@
     <div class="card-container">
         <!-- Front of card (Nepali) -->
         <div class="invitation-card front">
-            <div class="language-indicator"></div>
-            <div class="header">
+                <div class="header">
                 <img src="ganesha.png" alt="Ganesha">
                 <h1>श्री गणेशाय नमः</h1>
             </div>
@@ -325,8 +328,7 @@
         
         <!-- Back of card (Sanskrit) -->
         <div class="invitation-card back">
-            <div class="language-indicator"></div>
-            <div class="header">
+             <div class="header">
                 <img src="ganesha.png" alt="Ganesha">
                 <h1>श्री गणेशाय नमः</h1>
             </div>
@@ -378,11 +380,138 @@
             setCardHeight();
             window.addEventListener('resize', setCardHeight);
             
-            // Add click event listener to both flip icons
+            // Make flip icons draggable
             flipIcons.forEach(icon => {
-                icon.addEventListener('click', function(e) {
-                    cardContainer.classList.toggle('flipped');
-                    e.stopPropagation(); // Prevent the card click from also triggering
+                let isDragging = false;
+                let clickedForFlip = false;
+                let startX, startY, startLeft, startTop;
+                
+                // Load saved position if available
+                const savedPosition = localStorage.getItem('flipIconPosition');
+                if (savedPosition) {
+                    const { left, top } = JSON.parse(savedPosition);
+                    icon.style.left = left + 'px';
+                    icon.style.top = top + 'px';
+                    icon.style.right = 'auto';
+                    icon.style.bottom = 'auto';
+                }
+                // If no saved position, keep the default 75% from left, bottom position
+                
+                icon.addEventListener('mousedown', function(e) {
+                    clickedForFlip = true;
+                    isDragging = false;
+                    
+                    // Record starting positions
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    
+                    // Get current position relative to card
+                    const iconRect = icon.getBoundingClientRect();
+                    const cardRect = icon.closest('.invitation-card').getBoundingClientRect();
+                    
+                    startLeft = iconRect.left - cardRect.left;
+                    startTop = iconRect.top - cardRect.top;
+                    
+                    e.preventDefault(); // Prevent default behavior
+                });
+                
+                // Mouse move event for desktop
+                document.addEventListener('mousemove', function(e) {
+                    if (clickedForFlip) {
+                        isDragging = true; // Now we're dragging
+                        
+                        const card = icon.closest('.invitation-card');
+                        const cardRect = card.getBoundingClientRect();
+                        
+                        // Calculate new position
+                        let left = startLeft + (e.clientX - startX);
+                        let top = startTop + (e.clientY - startY);
+                        
+                        // Constrain to card boundaries
+                        left = Math.max(0, Math.min(left, cardRect.width - icon.offsetWidth));
+                        top = Math.max(0, Math.min(top, cardRect.height - icon.offsetHeight));
+                        
+                        // Set new position
+                        icon.style.left = left + 'px';
+                        icon.style.top = top + 'px';
+                        icon.style.right = 'auto';
+                        icon.style.bottom = 'auto';
+                        
+                        // Save position to localStorage
+                        localStorage.setItem('flipIconPosition', JSON.stringify({ left, top }));
+                    }
+                });
+                
+                // Mouse up event to stop dragging
+                document.addEventListener('mouseup', function(e) {
+                    if (clickedForFlip) {
+                        if (!isDragging) {
+                            // It was just a click (not a drag), so flip the card
+                            cardContainer.classList.toggle('flipped');
+                        }
+                        
+                        clickedForFlip = false;
+                        isDragging = false;
+                    }
+                });
+                
+                // Touch events for mobile
+                icon.addEventListener('touchstart', function(e) {
+                    clickedForFlip = true;
+                    isDragging = false;
+                    
+                    // Record starting position
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                    
+                    // Get current position relative to card
+                    const iconRect = icon.getBoundingClientRect();
+                    const cardRect = icon.closest('.invitation-card').getBoundingClientRect();
+                    
+                    startLeft = iconRect.left - cardRect.left;
+                    startTop = iconRect.top - cardRect.top;
+                    
+                    e.preventDefault(); // Prevent default behavior
+                });
+                
+                // Touch move event for mobile
+                document.addEventListener('touchmove', function(e) {
+                    if (clickedForFlip) {
+                        isDragging = true; // Now we're dragging
+                        
+                        const card = icon.closest('.invitation-card');
+                        const cardRect = card.getBoundingClientRect();
+                        
+                        // Calculate new position
+                        let left = startLeft + (e.touches[0].clientX - startX);
+                        let top = startTop + (e.touches[0].clientY - startY);
+                        
+                        // Constrain to card boundaries
+                        left = Math.max(0, Math.min(left, cardRect.width - icon.offsetWidth));
+                        top = Math.max(0, Math.min(top, cardRect.height - icon.offsetHeight));
+                        
+                        // Set new position
+                        icon.style.left = left + 'px';
+                        icon.style.top = top + 'px';
+                        icon.style.right = 'auto';
+                        icon.style.bottom = 'auto';
+                        
+                        // Save position to localStorage
+                        localStorage.setItem('flipIconPosition', JSON.stringify({ left, top }));
+                    }
+                }, { passive: false });
+                
+                // Touch end event to stop dragging on mobile
+                document.addEventListener('touchend', function(e) {
+                    if (clickedForFlip) {
+                        if (!isDragging) {
+                            // It was just a tap (not a drag), so flip the card
+                            cardContainer.classList.toggle('flipped');
+                        }
+                        
+                        clickedForFlip = false;
+                        isDragging = false;
+                    }
                 });
             });
             
