@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>बधाई तथा शुभकामना</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            perspective: 1000px;
+        }
+        
+        .card-container {
+            width: 700px;
+            height: 800px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+        }
+        
+        .card-container.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .invitation-card {
+            width: 700px;
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: absolute;
+            backface-visibility: hidden;
+            overflow-y: auto;
+            max-height: 800px;
+            cursor: pointer;
+        }
+        
+        .invitation-card.back {
+            transform: rotateY(180deg);
+        }
+        
+        .invitation-card::before, .invitation-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 20px;
+            background: #fff;
+        }
+        
+        .invitation-card::before {
+            left: 0;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        .invitation-card::after {
+            right: 0;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .header {
+            margin-bottom: 20px;
+        }
+        
+        .header img {
+            width: 50px;
+            height: auto;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        
+        .invitation-title {
+            font-size: 36px;
+            color: #800000;
+            margin: 20px 0;
+        }
+        
+        .footer {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        
+        .flower {
+            width: 50px;
+            height: auto;
+            position: absolute;
+            z-index: 1;
+        }
+        
+        .flower-left {
+            top: 20px;
+            left: 20px;
+        }
+        
+        .flower-right {
+            top: 20px;
+            right: 20px;
+        }
+        
+        .flower-bottom-left {
+            bottom: 20px;
+            left: 20px;
+        }
+        
+        .flower-bottom-right {
+            bottom: 20px;
+            right: 20px;
+        }
+        
+        #contact {
+            text-align: center;
+            font-size: smaller;
+        }
+        
+        .person-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            border: 3px solid #800000;
+            animation: pulse 3s infinite ease-in-out, color-glow 8s infinite linear;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes color-glow {
+            0% {
+                box-shadow: 0 0 15px rgba(255, 165, 0, 0.8); /* Orange */
+            }
+            25% {
+                box-shadow: 0 0 15px rgba(255, 255, 0, 0.8); /* Yellow */
+            }
+            50% {
+                box-shadow: 0 0 15px rgba(0, 0, 255, 0.8); /* Blue */
+            }
+            75% {
+                box-shadow: 0 0 15px rgba(0, 128, 0, 0.8); /* Green */
+            }
+            100% {
+                box-shadow: 0 0 15px rgba(255, 165, 0, 0.8); /* Back to Orange */
+            }
+        }
+        
+        .congratulation-message {
+            font-size: 20px;
+            line-height: 1.5;
+            margin: 20px 0;
+            padding: 0 20px;
+            text-align: justify;
+        }
+        
+        /* Flip icon styling */
+        .flip-icon {
+            position: absolute;
+            bottom: 70px;
+            right: 70px;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(128, 0, 0, 0.8);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .flip-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+        
+        .language-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #800000;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <!-- Front of card (Nepali) -->
+        <div class="invitation-card front">
+            <div class="language-indicator">*</div>
+            <div class="header">
+                <img src="ganesha.png" alt="Ganesha">
+                <h1>श्री गणेशाय नमः</h1>
+            </div>
+            <div class="content">
+                <p class="invitation-title">हार्दिक बधाई तथा शुभकामना</p>
+                <img src="bj.jpeg" alt="विजयप्रसाद मिश्र" class="person-photo">
+                <p><b>आदरणीय गुरु श्री विजयप्रसाद मिश्रज्यू, <br>सादर अभिवादन</b>,</p>
+                
+                <p class="congratulation-message">
+                    नेपाल बार एसोसियसनको अध्यक्ष पदमा विजयी हुनुभएकोमा हार्दिक बधाई! यो ऐतिहासिक क्षण न्यायिक क्षेत्रमा एक नवीन युगको सुरुआत हो। हजूरको दृढ इच्छाशक्ति, अटल नेतृत्व र गहन कानूनी ज्ञानले नेपालको न्याय प्रणालीमा आमूल परिवर्तन ल्याउने विश्वास गर्दछौं। तपाईंको कुशल नेतृत्वमा नेपाल बार एसोसियसनले न्यायपालिकाको स्वतन्त्रता, कानूनको शासन र मानव अधिकारको संरक्षणमा अभूतपूर्व योगदान पुराओस्। हजूरको यो जीतले न्यायिक सुधारको नविन अध्याय लेखिने अपेक्षा राख्दछौं! कीर्तिमय कार्यकाल लागि हार्दिक शुभकामना व्यक्त गर्दछौं!!!
+                </p>
+            </div>
+            <div class="footer">
+                <u>शिष्य/शिष्या</u><br><span id="contact">शिवप्रसाद आचार्य <br> अधिवक्ता देबका तिमिल्सिना<br>२०८१।१२।।२८</span>
+            </div>
+            <img src="flower.png" alt="Flower" class="flower flower-left">
+            <img src="flower.png" alt="Flower" class="flower flower-right">
+            <img src="flower.png" alt="Flower" class="flower flower-bottom-left">
+            <img src="flower.png" alt="Flower" class="flower flower-bottom-right">
+            
+            <div class="flip-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z"/>
+                </svg>
+            </div>
+        </div>
+        
+        <!-- Back of card (Sanskrit) -->
+        <div class="invitation-card back">
+            <div class="language-indicator">.</div>
+            <div class="header">
+                <img src="ganesha.png" alt="Ganesha">
+                <h1>श्री गणेशाय नमः</h1>
+            </div>
+            <div class="content">
+                <p class="invitation-title">हार्दिक अभिनन्दनम्</p>
+                <img src="bj.jpeg" alt="विजयप्रसाद मिश्र" class="person-photo">
+                <p><b>आदरणीय गुरु श्री विजयप्रसाद मिश्र, <br>सादरं प्रणमामि</b>,</p>
+                
+                <p class="congratulation-message">
+                    नेपालबारएसोसियसनस्य अध्यक्षपदे विजयं प्राप्य हार्दिकाः अभिनन्दनाः समर्पयामः! अयम् ऐतिहासिकः क्षणः न्यायिकक्षेत्रे नूतनयुगस्य आरम्भः इति अनुभवामि। भवतः दृढसंकल्पः, अचलं नेतृत्वं, गहनं विधिकज्ञानं च नेपालस्य न्यायव्यवस्थायाम् आमूलपरिवर्तनम् आनेष्यति इति विश्वसिमः। भवतः कुशलनेतृत्वे नेपालबारएसोसियसनः न्यायपालिकायाः स्वातन्त्र्यस्य, विधिशासनस्य, मानवाधिकारसंरक्षणस्य च क्षेत्रे अपूर्वं योगदानं करिष्यति। भवतः अयं विजयः न्यायिकसुधारस्य स्वर्णिमम् अध्यायं लिखिष्यति इति आशां कुर्मः! यशस्विने दीप्तिमते कीर्तिमये च कार्यकाले कृते हार्दिकाः शुभकामनाः अपि व्यक्तयामः!!!
+                </p>
+            </div>
+            <div class="footer">
+                <u>शिष्य/शिष्या</u><br><span id="contact">शिवप्रसाद आचार्य <br> अधिवक्ता देबका तिमिल्सिना<br>२०८१।१२।।२८</span>
+            </div>
+            <img src="flower.png" alt="Flower" class="flower flower-left">
+            <img src="flower.png" alt="Flower" class="flower flower-right">
+            <img src="flower.png" alt="Flower" class="flower flower-bottom-left">
+            <img src="flower.png" alt="Flower" class="flower flower-bottom-right">
+            
+            <div class="flip-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const cardContainer = document.querySelector('.card-container');
+        const cards = document.querySelectorAll('.invitation-card');
+        const flipIcons = document.querySelectorAll('.flip-icon');
+        
+        // Add click event listener to both flip icons
+        flipIcons.forEach(icon => {
+            icon.addEventListener('click', function(e) {
+                cardContainer.classList.toggle('flipped');
+                e.stopPropagation(); // Prevent the card click from also triggering
+            });
+        });
+        
+        // Add click event listener to both sides of the card
+        cards.forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Only flip if the click wasn't on the flip icon (already handled above)
+                if (!e.target.closest('.flip-icon')) {
+                    cardContainer.classList.toggle('flipped');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
